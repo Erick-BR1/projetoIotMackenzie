@@ -1,20 +1,26 @@
+// Bibliotecas
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
 // Configurações do WiFi
-const char* ssid = "Jonisfreide";
-const char* password = "Ticolitle69.";
+const char* ssid = "inheritance";
+const char* password = "Bliat.";
 
 // Configurações do broker MQTT
 const char* mqtt_server = "possum.lmq.cloudamqp.com";
 const int mqtt_port = 1883;
 const char* mqtt_user = "qbbqncsk";
 const char* mqtt_pass = "pJJrbUVyW3xrgtj2ghor4FEFlsuTfBgl";
-const char* mqtt_topic = "possum.lmq.cloudamqp.com";
+const char* mqtt_topic = "sensor/turbidez";
 
+// Pino do sensor de turbidez
+const int turbidezPin = A0;
+
+// Objetos WiFi e MQTT
 WiFiClient espClient;
 PubSubClient client(espClient);
 
+// Conexão com o WiFi
 void setup_wifi() {
   delay(10);
   WiFi.begin(ssid, password);
@@ -23,6 +29,7 @@ void setup_wifi() {
   }
 }
 
+// Reconexão com o broker MQTT
 void reconnect() {
   while (!client.connected()) {
     client.connect("ESP01Client", mqtt_user, mqtt_pass);
@@ -30,23 +37,26 @@ void reconnect() {
 }
 
 void setup() {
-  Serial.begin(9600); // Lê dados do Arduino pela UART
+  Serial.begin(9600); // Comunicação serial com o Arduino
   setup_wifi();
   client.setServer(mqtt_server, mqtt_port);
 }
 
 void loop() {
+  // Verifica a conexão MQTT
   if (!client.connected()) {
     reconnect();
   }
   client.loop();
 
+  // Leitura serial (se estiver recebendo dados de outro dispositivo)
   if (Serial.available()) {
     String valor = Serial.readStringUntil('\n');
     client.publish("sensor/turbidez", valor.c_str());
   }
 
-int turbidez = analogRead(turbidezPin);
+  // Leitura do sensor de turbidez
+  int turbidez = analogRead(turbidezPin);
   String estado;
 
   if (turbidez > 700) {
@@ -57,12 +67,13 @@ int turbidez = analogRead(turbidezPin);
     estado = "Água muito suja";
   }
 
+  // Exibe no monitor serial
   Serial.print("Turbidez: ");
   Serial.print(turbidez);
   Serial.print(" | Estado: ");
   Serial.println(estado);
 
-  // Publica no MQTT
+  // Publica no tópico MQTT
   String mensagem = "{\"turbidez\":" + String(turbidez) + ",\"estado\":\"" + estado + "\"}";
   client.publish(mqtt_topic, mensagem.c_str());
 
