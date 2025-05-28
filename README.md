@@ -1,11 +1,13 @@
 ***Leitura de qualidade da água com sensor de turbidez***
 
+
 ***Breve Descrição do Funcionamento e Uso***
 
 Este projeto tem como objetivo monitorar a qualidade da água através de um sensor de turbidez, conectando-se à internet via Wi-Fi com o módulo ESP8266 (por exemplo, ESP-01 ou NodeMCU).
 Os dados lidos são enviados para um broker MQTT que pode ser acessado remotamente para visualizar os valores e o estado da água.
 
 O projeto pode ser utilizado por escolas, estações de tratamento de água, projetos ambientais, ou mesmo projetos educacionais com foco nos Objetivos de Desenvolvimento Sustentável (ODS), especialmente o ODS 6 - Água potável e saneamento.
+
 
  ***Descrição do Hardware Utilizado***
 
@@ -16,6 +18,7 @@ O projeto pode ser utilizado por escolas, estações de tratamento de água, pro
 | **Resistores**                  | Usados para limitar corrente do sensor                    |
 | **Protoboard e Jumpers**        | Para montagem rápida do circuito                          |
 | **Fonte de Alimentação 5V**     | Pode ser via USB ou adaptador externo                     |
+
 
 
 ***Documentação das Interfaces, Protocolos e Módulos de Comunicação***
@@ -47,6 +50,7 @@ O projeto pode ser utilizado por escolas, estações de tratamento de água, pro
 • Serial
 
     Comunicação com monitor serial a 9600 bps para depuração local
+
 
 ***Comunicação/Controle via Internet e Uso do Protocolo MQTT***
 
